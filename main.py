@@ -1,0 +1,33 @@
+from utils import time_series as ts
+from utils import windows as w
+from utils import visualize
+from utils import diagrams
+from utils import sw1pers_scores
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.arange(0, 36*2*np.pi, 0.1)
+test_ts = np.cos(x)
+
+test_emb_ts = ts.embed(test_ts, 3, 10)
+
+# visualize.attractor(test_emb_ts)
+
+#--------------------------------------------------
+size = 10
+stride = 4
+
+test_emb_windows, dims, delays = w.make_embedded_windows(test_ts, size, stride)
+
+pers_dgms = diagrams.make_pers_diagrams(test_emb_windows)
+
+scores = sw1pers_scores.compute_scores(pers_dgms)
+
+print(scores)
+
+#--------------------------------------
+rolling_size_scores = int(size/stride)
+                          
+score_density = sw1pers_scores.density(scores, rolling_size_scores)
+
+sw1pers_scores.plot_scores(scores, score_density, test_ts, size, stride, None, rolling_size_scores)
