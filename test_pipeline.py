@@ -26,7 +26,7 @@ test_emb_ts = ts.embed(test_ts, 3, 10)
 
 # visualize.attractor(test_emb_ts)
 
-#--------------------------------------------------
+#------------------------------------------------
 size = 10
 stride = 4
 
@@ -38,7 +38,7 @@ scores = sw1pers_scores.compute_scores(pers_dgms)
 
 print(scores)
 
-#--------------------------------------
+#-----------------------------------------------
 rolling_size_scores = int(size/stride)
                           
 score_density = sw1pers_scores.density(scores, rolling_size_scores)
