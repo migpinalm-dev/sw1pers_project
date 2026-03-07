@@ -1,13 +1,26 @@
 from utils import time_series as ts
 from utils import windows as w
+from utils import data_processing
 from utils import visualize
 from utils import diagrams
 from utils import sw1pers_scores
 import numpy as np
 import matplotlib.pyplot as plt
 
+#------------------------------------------------
+
 x = np.arange(0, 36*2*np.pi, 0.1)
 test_ts = np.cos(x)
+
+#------------------------------------------------
+
+t_ma, ma = data_processing.moving_avg(test_ts)
+plt.plot(t_ma, ma)
+
+t_fine, finer_spline = data_processing.make_spline(t_ma, ma, 2500)
+plt.plot(t_fine, finer_spline)
+
+#------------------------------------------------
 
 test_emb_ts = ts.embed(test_ts, 3, 10)
 
