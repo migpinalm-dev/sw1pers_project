@@ -7,6 +7,8 @@ def make_pers_diagram(data, thresh):
 
 def make_pers_diagrams(emb_windows):
     diagrams = []
+    print()
+    print("Forming persistence diagrams...\n")
     for window in tqdm(emb_windows):
         dgm = make_pers_diagram(window, thresh = 1)
         diagrams.append(dgm)
