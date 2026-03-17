@@ -1,0 +1,6 @@
+v0.1.0 - 03-17-2026
+-------------------
+Initial release
+- utils/ data_processing, diagrams, parameter_selection, sw1pers_scores, time_series, viualize, windows
+- core.py
+- test_pipeline.py

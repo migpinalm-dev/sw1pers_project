@@ -1,9 +1,3 @@
-# from utils import time_series as ts
-# from utils import windows as w
-# from utils import data_processing
-# from utils import visualize
-# from utils import diagrams
-# from utils import sw1pers_scores
 from core import SW1PerS
 
 import numpy as np

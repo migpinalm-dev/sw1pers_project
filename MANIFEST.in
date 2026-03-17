@@ -1,0 +1,8 @@
+include README.md
+include LICENSE.txt
+include CHANGES.txt
+
+recursive-include utils *.py
+recursive-include utils *.json
+recursive-include utils *.yaml
+recursive-include utils *.txt
