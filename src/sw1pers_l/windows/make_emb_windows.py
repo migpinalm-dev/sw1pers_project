@@ -1,8 +1,8 @@
 from tqdm import tqdm
 import numpy as np
 
-from utils import parameter_selection
-from utils import time_series
+from sw1pers_l import parameter_selection
+from sw1pers_l import time_series
 
 from .point_cloud_tools import mean_center, normalize, meanshift_pointcloud
 
