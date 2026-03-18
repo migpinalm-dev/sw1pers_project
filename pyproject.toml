@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sw1pers_l"
+version = "0.1.0"
+description = "SW1Pers landscape for time series periodicity analysis"
+readme = "README.md"
+license = { file = "LICENSE.txt" }
+authors = [
+    {name = "Miguel Almeida", email = "migpinalm@gmail.com"}
+]
+requires-python = ">=3.11"
+
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "scipy",
+    "scikit-learn",
+    "tqdm",
+    "ripser",
+    "plotly"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["sw1pers_l*"]
