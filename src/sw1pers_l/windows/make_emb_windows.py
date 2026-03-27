@@ -22,15 +22,18 @@ def make_embedded_windows(X, window_size, window_stride):
     for i, window in enumerate(tqdm(windows)):
         ami = parameter_selection.average_mutual_information(window, bins=int(np.sqrt(len(window)))+1)
         delay = parameter_selection.compute_optimal_delay(ami, msg_bool=False)
+        input_delays.append(delay)
+        
         fnn = parameter_selection.false_nearest_neighbors(window, max_dim=10, delay=delay)
         dim = parameter_selection.compute_optimal_dim(fnn, msg_bool=False)
+        input_dimensions.append(dim)
 
     print()
     print("Forming point clouds...\n")
     for i, window in enumerate(tqdm(windows)):
-        input_dim = dim + 1  #max(dim, 3)      # make this (dim + 1) to not squish some cycles trivial
-        input_dimensions.append(input_dim)
-        input_delays.append(delay)
+        input_dim = input_dimensions[i]  #max(dim, 3)      # make this (dim + 1) to not squish some cycles trivial
+        input_delay = input_delays[i]
+        
         emb_window = time_series.embed(window, input_dim, delay)
 
         emb_window = mean_center(emb_window)

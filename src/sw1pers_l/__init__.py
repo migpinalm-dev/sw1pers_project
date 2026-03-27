@@ -1,5 +1,5 @@
 # utils init
 
-from .core import SW1PerS
+from .core import SW1PerS, SW1PerS_L
 
-__all__ = ["SW1PerS"]
+__all__ = ["SW1PerS, SW1PerS_L"]
