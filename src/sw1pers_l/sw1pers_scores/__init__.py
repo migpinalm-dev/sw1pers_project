@@ -3,6 +3,7 @@
 
 from .max_features import select_max_features
 from .score import compute_scores
-from .density_plot import density, plot_scores
+from .plot import plot_score_landscape, plot_scores_comparison
+from ._density import density
 
-__all__ = ["select_max_features", "compute_scores", "density", "plot_scores"]
+__all__ = ["select_max_features", "compute_scores", "plot_score_landscape", "plot_scores_comparison", "density"]

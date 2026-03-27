@@ -1,7 +1,7 @@
 from tqdm import tqdm
 from ripser import ripser
 
-def make_pers_diagram(data, thresh):
+def make_pers_diagram(data, thresh = 1):
     result = ripser(data, maxdim=1, thresh=1, coeff=13)    # coeff must not divide window size!
     return result['dgms']
 
