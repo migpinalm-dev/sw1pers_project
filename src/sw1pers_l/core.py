@@ -36,6 +36,7 @@ def SW1PerS_L(values, rolling_size=1, factor=2, choose_hyper_param=False):
         stride = size//stride_coeff
         print(f"window_size = len(time_series)/{size_coeff}")
         print(f"window_stride = window_size/{stride_coeff}")
+        print()
     else:
         size = len(finer_spline)//8
         stride = size//4

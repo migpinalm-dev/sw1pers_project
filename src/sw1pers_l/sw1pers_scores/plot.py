@@ -59,7 +59,7 @@ def plot_score_landscape(scores, score_density, finer_spline, window_size, windo
     plt.grid()
     plt.show()
 
-def plot_scores_comparison(scores, secondary_scores, window_size, window_stride, dates, rolling_size_scores):
+def plot_scores_comparison(scores, secondary_scores, window_size, window_stride, dates):
     fig, ax1 = plt.subplots(figsize=(11, 4))
     offset = round(window_size/2)
 
@@ -80,8 +80,8 @@ def plot_scores_comparison(scores, secondary_scores, window_size, window_stride,
     ax2.tick_params(axis='y', labelcolor = "orange")
 
     # sw1pers density plot -----------------
-    ma_x = bar_x[rolling_size_scores//2 : -(rolling_size_scores//2)]  # center alignment
-    ma_y = scores[rolling_size_scores//2 : -(rolling_size_scores//2)]
+    ma_x = bar_x#[rolling_size_scores//2 : -(rolling_size_scores//2)]  # center alignment
+    ma_y = scores#[rolling_size_scores//2 : -(rolling_size_scores//2)]
     ax2.plot(ma_x, ma_y, color="red", linewidth=1, label="Periodicity Density")
 
     #Window indexing -----------------------
