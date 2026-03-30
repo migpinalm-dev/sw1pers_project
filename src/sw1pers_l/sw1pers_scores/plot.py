@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import matplotlib.dates as mdates
+from sw1pers_l.sw1pers_scores._density import density
 
 def plot_score_landscape(scores, score_density, finer_spline, window_size, window_stride, dates, rolling_size_scores):
 
@@ -59,36 +60,45 @@ def plot_score_landscape(scores, score_density, finer_spline, window_size, windo
     plt.grid()
     plt.show()
 
-def plot_scores_comparison(scores, secondary_scores, window_size, window_stride, dates, rolling_size_scores):
+def plot_scores_comparison(scores, secondary_scores, window_size, window_stride, dates, score_rolling_size=1, sec_score_rolling_size=1, is_score_windowed = False, show_bars = False):
     fig, ax1 = plt.subplots(figsize=(11, 4))
     offset = round(window_size/2)
 
-    # Window bars set up -------------------------
-    bar_y = scores
-    bar_x = np.arange(offset, offset + window_stride * len(scores), window_stride)
-    bar_width = window_size
+    # Window x-axis set up -------------------------
+    windows_x = np.arange(offset, offset + window_stride * len(scores), window_stride)
+    
+    # Secondary scores plot ----------------
+    sec_score_density = density(secondary_scores, sec_score_rolling_size)
+    if is_score_windowed:
+        ax1.plot(windows_x, sec_score_density, color="C0", linewidth=1, label="Secondary Scores")
+        ax1.set_ylabel("Secondary Scores", color = "C0")
+        ax1.tick_params(axis='y', labelcolor = 'C0')
+    else:
+        x = range(0, len(density(secondary_scores, sec_score_rolling_size)))
+        ax1.plot(x, sec_score_density, label="Secondary Score Landscape", color="C0", alpha=0.4)
+        ax1.set_ylabel("Secondary Score Landscape", color="C0")
+        ax1.tick_params(axis='y', labelcolor='C0')
 
-    # secondary scores plot ----------------
-    ax1.plot(bar_x, secondary_scores, color="C0", linewidth=1, label="Secondary Scores")
-    ax1.set_ylabel("Secondary Scores", color = "C0")
-    ax1.tick_params(axis='y', labelcolor = 'C0')
+    ax2 = ax1.twinx()
 
     #sw1pers bars plot
-    ax2 = ax1.twinx()
-    ax2.bar(bar_x, bar_y, width=bar_width, alpha=0.15, label="Periodicity Scores", color = "orange")
-    ax2.set_ylabel("Periodicity Scores", color = "orange")
-    ax2.tick_params(axis='y', labelcolor = "orange")
+    if show_bars:
+        windows_y = scores
+        bar_width = window_size
+        ax2.bar(windows_x, windows_y, width=bar_width, alpha=0.15, label="Periodicity Scores", color = "orange")
+        ax2.set_ylabel("Periodicity Scores", color = "orange")
+        ax2.tick_params(axis='y', labelcolor = "orange")
 
-    # sw1pers density plot -----------------
-    ma_x = bar_x[rolling_size_scores//2 : -(rolling_size_scores//2)]  # center alignment
-    ma_y = scores[rolling_size_scores//2 : -(rolling_size_scores//2)]
+    # sw1pers plot -----------------
+    ma_x = windows_x[-int(-score_rolling_size//2) : int(-score_rolling_size//2)]  # center alignment
+    ma_y = density(scores, score_rolling_size)[-int(-score_rolling_size//2) : int(-score_rolling_size//2)]    # math.ceil(score_rolling_size//2)) also works here
     ax2.plot(ma_x, ma_y, color="red", linewidth=1, label="Periodicity Density")
 
     #Window indexing -----------------------
     secax = ax2.secondary_xaxis("top")
     step = 20
-    tick_positions = bar_x[::step]
-    tick_labels = [str(i) for i in range(0, len(bar_x), step)]
+    tick_positions = windows_x[::step]
+    tick_labels = [str(i) for i in range(0, len(windows_x), step)]
     secax.set_xticks(tick_positions)
     secax.set_xticklabels(tick_labels, rotation=45)
     secax.set_xlabel("Windows")
