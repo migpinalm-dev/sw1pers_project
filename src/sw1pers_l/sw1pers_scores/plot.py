@@ -16,10 +16,10 @@ def plot_score_landscape(scores, score_density, finer_spline, window_size, windo
     bar_y = scores
     bar_x = np.arange(offset, offset + window_stride * len(scores), window_stride)
     bar_width = window_size
-    ax2.bar(bar_x, bar_y, width=bar_width, alpha=0.35, label="Periodicity Score", color = "orange")
+    ax2.bar(bar_x, bar_y, width=bar_width, alpha=0.15, label="Periodicity Score", color = "orange")
     ax2.set_ylabel("Periodicity Score", color = "orange")
     ax2.tick_params(axis='y', labelcolor = "orange")
-    ax2.set_ylim(0, 1.05)
+    ax2.set_ylim(0, np.max(bar_y)*1.05)
 
     # Primary y-axis (time series) ------------------------------------------------
     ax1.plot(x, finer_spline, label="Time Series Spline", color="C0", alpha=0.4)
@@ -71,12 +71,12 @@ def plot_scores_comparison(scores, secondary_scores, window_size, window_stride,
     sec_score_density = density(secondary_scores, sec_score_rolling_size)
     if is_score_windowed:
         ax1.plot(windows_x, sec_score_density, color="C0", linewidth=1, label="Secondary Scores")
-        ax1.set_ylabel("Secondary Scores", color = "C0")
+        ax1.set_ylabel("Test anomaly score", color = "C0")
         ax1.tick_params(axis='y', labelcolor = 'C0')
     else:
         x = range(0, len(density(secondary_scores, sec_score_rolling_size)))
-        ax1.plot(x, sec_score_density, label="Secondary Score Landscape", color="C0", alpha=0.4)
-        ax1.set_ylabel("Secondary Score Landscape", color="C0")
+        ax1.plot(x, sec_score_density, linewidth=1, label="Secondary Score Landscape", color="C0")
+        ax1.set_ylabel("Test anomaly score", color="C0")
         ax1.tick_params(axis='y', labelcolor='C0')
 
     ax2 = ax1.twinx()
@@ -92,7 +92,9 @@ def plot_scores_comparison(scores, secondary_scores, window_size, window_stride,
     # sw1pers plot -----------------
     ma_x = windows_x[-int(-score_rolling_size//2) : int(-score_rolling_size//2)]  # center alignment
     ma_y = density(scores, score_rolling_size)[-int(-score_rolling_size//2) : int(-score_rolling_size//2)]    # math.ceil(score_rolling_size//2)) also works here
-    ax2.plot(ma_x, ma_y, color="red", linewidth=1, label="Periodicity Density")
+    ax2.plot(ma_x, ma_y, color="orange", linewidth=1, label="Periodicity Density")
+    ax2.set_ylabel("Periodicity score", color="orange")
+    ax2.tick_params(axis='y', labelcolor='orange')
 
     #Window indexing -----------------------
     secax = ax2.secondary_xaxis("top")
