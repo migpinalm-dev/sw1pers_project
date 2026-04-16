@@ -60,7 +60,7 @@ def plot_score_landscape(scores, score_density, finer_spline, window_size, windo
     plt.grid()
     plt.show()
 
-def plot_scores_comparison(scores, secondary_scores, window_size, window_stride, dates, score_rolling_size=1, sec_score_rolling_size=1, is_score_windowed = False, show_bars = False):
+def plot_scores_comparison(scores, secondary_scores, window_size, window_stride, dates, factor=1, score_rolling_size=1, sec_score_rolling_size=1, is_score_windowed = False, show_bars = False, label_msg = "Alternative anomaly score"):
     fig, ax1 = plt.subplots(figsize=(11, 4))
     offset = round(window_size/2)
 
@@ -71,12 +71,12 @@ def plot_scores_comparison(scores, secondary_scores, window_size, window_stride,
     sec_score_density = density(secondary_scores, sec_score_rolling_size)
     if is_score_windowed:
         ax1.plot(windows_x, sec_score_density, color="C0", linewidth=1, label="Secondary Scores")
-        ax1.set_ylabel("Test anomaly score", color = "C0")
+        ax1.set_ylabel(label_msg, color = "C0")
         ax1.tick_params(axis='y', labelcolor = 'C0')
     else:
         x = range(0, len(density(secondary_scores, sec_score_rolling_size)))
         ax1.plot(x, sec_score_density, linewidth=1, label="Secondary Score Landscape", color="C0")
-        ax1.set_ylabel("Test anomaly score", color="C0")
+        ax1.set_ylabel(label_msg, color="C0")
         ax1.tick_params(axis='y', labelcolor='C0')
 
     ax2 = ax1.twinx()
@@ -107,8 +107,8 @@ def plot_scores_comparison(scores, secondary_scores, window_size, window_stride,
 
     # Date indexing (and primary time series) ---------------------------------------------------------------
     if dates is not None:
-        n_ticks = int(len(dates)/window_size/2)
-        tick_positions = np.linspace(0, len(dates)-1, n_ticks, dtype=int)
+        n_ticks = int(len(dates)*factor/(window_size))
+        tick_positions = np.linspace(0, len(dates)*factor-1, n_ticks, dtype=int)
         tick_dates = pd.date_range(start=dates[0], end=dates[-1], periods=n_ticks)
         ax1.set_xticks(tick_positions)
         ax1.set_xticklabels(tick_dates.strftime("%Y-%m-%d"), rotation=45, ha="right")    #%Y-%m-%d [%H:%M]
