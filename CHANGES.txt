@@ -1,6 +1,11 @@
 v0.1.0 - 03-17-2026
 -------------------
 Initial release
-- utils/ data_processing, diagrams, parameter_selection, sw1pers_scores, time_series, viualize, windows
-- core.py
-- test_pipeline.py
+- src/ sw1pers_l/ data_processing; diagrams; parameter_selection; sw1pers_scores; time_series; viualize; windows
+- src/ sw1pers_l/ core.py
+- tests/ test_pipeline.py, alg_comparison.ipynb
+
+v0.1.1 - 04-23-2026
+-------------------
+Initial release, 1st patch
+- cleaned up backend prints made for visual aid
