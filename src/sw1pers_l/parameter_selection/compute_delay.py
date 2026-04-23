@@ -36,7 +36,7 @@ def compute_optimal_delay(ami, msg_bool=False):
     for i in range(1, len(ami) - 1):
         if ami[i] < ami[i - 1] and ami[i] <= ami[i + 1]:
             if msg_bool:
-                print(f"Optimal delay found at τ = {i+1}")
+                print(f"Optimal delay found at tau = {i+1}")
             return i + 1
     if msg_bool:
         print("No local minimum found, using delay = 1")

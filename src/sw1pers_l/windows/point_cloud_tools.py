@@ -6,10 +6,6 @@ def mean_center(X):
 def normalize(X):
     return X/np.linalg.norm(X, axis = 1, keepdims=True)
 
-# def mean_center_normalize(X):
-#     return normalize(mean_center(X))
-
-
 from sklearn.metrics.pairwise import pairwise_distances
 
 def meanshift_pointcloud(SW_cloud, epsilon, metric='cosine'):
