@@ -6,11 +6,13 @@ Initial release
 - tests/ test_pipeline.py, alg_comparison.ipynb
 
 v0.1.1 - April 23, 2026
--------------------
-Initial release, 1st patch
+1st patch:
 - cleaned up backend prints made for visual aid
 
 v0.1.2 - June 1, 2026
--------------------
-Initial release, 2nd patch
+2nd patch:
 - Added functionality to core.py/SW1PerS_L: window size and stride can now be set in terms of instances, instead of ratios, if so desired
+
+v0.1.3 - June 1, 2026
+3rd patch:
+- corrected previous added functionality

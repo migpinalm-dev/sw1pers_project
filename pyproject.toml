@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sw1pers_l"
-version = "0.1.2"
+version = "0.1.3"
 description = "SW1Pers landscape for time series periodicity analysis"
 readme = "README.md"
 license = { file = "LICENSE.txt" }

@@ -40,8 +40,8 @@ def SW1PerS_L(values, rolling_size=1, factor=2, choose_hyper_param=False):
             print(f"window_stride = window_size/{stride_coeff}")
             print()
         else:
-            size_coeff = int(input("Window size = __"))
-            stride_coeff = int(input("Window stride = __"))
+            size = int(input("Window size = __"))
+            stride = int(input("Window stride = __"))
             print()
             print(f"window_size = {size}")
             print(f"window_stride = {stride}")
