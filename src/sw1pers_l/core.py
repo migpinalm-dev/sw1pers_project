@@ -29,14 +29,23 @@ def SW1PerS_L(values, rolling_size=1, factor=2, choose_hyper_param=False):
 
     #-----------------------------------
     if choose_hyper_param:
-        size_coeff = int(input("Window size = length of time series / __"))
-        stride_coeff = int(input("Window stride = window size / __"))
-        size = len(finer_spline)//size_coeff
-        stride = size//stride_coeff
-        print()
-        print(f"window_size = len(time_series)/{size_coeff}")
-        print(f"window_stride = window_size/{stride_coeff}")
-        print()
+        in_instances = int(input("Provide size and stride in RATIOS (0) or INSTANCES (any key)"))
+        if in_instances == 0:
+            size_coeff = int(input("Window size = length of time series / __"))
+            stride_coeff = int(input("Window stride = window size / __"))
+            size = len(finer_spline)//size_coeff
+            stride = size//stride_coeff
+            print()
+            print(f"window_size = len(time_series)/{size_coeff}")
+            print(f"window_stride = window_size/{stride_coeff}")
+            print()
+        else:
+            size_coeff = int(input("Window size = __"))
+            stride_coeff = int(input("Window stride = __"))
+            print()
+            print(f"window_size = {size}")
+            print(f"window_stride = {stride}")
+            print()
     else:
         size = len(finer_spline)//8
         stride = size//4
