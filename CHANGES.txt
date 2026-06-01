@@ -1,11 +1,16 @@
-v0.1.0 - 03-17-2026
+v0.1.0 - March 17, 2026
 -------------------
 Initial release
 - src/ sw1pers_l/ data_processing; diagrams; parameter_selection; sw1pers_scores; time_series; viualize; windows
 - src/ sw1pers_l/ core.py
 - tests/ test_pipeline.py, alg_comparison.ipynb
 
-v0.1.1 - 04-23-2026
+v0.1.1 - April 23, 2026
 -------------------
 Initial release, 1st patch
 - cleaned up backend prints made for visual aid
+
+v0.1.2 - June 1, 2026
+-------------------
+Initial release, 2nd patch
+- Added functionality to core.py/SW1PerS_L: window size and stride can now be set in terms of instances, instead of ratios, if so desired
