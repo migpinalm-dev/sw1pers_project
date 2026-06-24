@@ -21,7 +21,7 @@ def SW1PerS(values, rolling_size=1, factor=1):
 
 #---------------------------------------------------------------------
 
-def SW1PerS_L(values, rolling_size=1, factor=1, size=1, stride=1, choose_hyper_param=False, plot_bool = False):
+def SW1PerS_L(values, rolling_size=1, factor=1, size=1, stride=1, min_dim=3, choose_hyper_param=False, plot_bool = False):
 
     t_ma, ma = moving_avg(values, rolling_size)
 
@@ -29,8 +29,8 @@ def SW1PerS_L(values, rolling_size=1, factor=1, size=1, stride=1, choose_hyper_p
 
     #-----------------------------------
     if choose_hyper_param:
-        size = int(input("Window size = __"))
-        stride = int(input("Window stride = __"))
+        size = int(input("Please choose a window size: "))
+        stride = int(input("Please choose a window stride: "))
         print()
         print(f"window_size = {size}")
         print(f"window_stride = {stride}")
@@ -41,7 +41,7 @@ def SW1PerS_L(values, rolling_size=1, factor=1, size=1, stride=1, choose_hyper_p
         print(f"window_stride = {stride}")
         print()
 
-    emb_windows, _, _ = make_embedded_windows(finer_spline, size, stride)
+    emb_windows, _, _ = make_embedded_windows(finer_spline, size, stride, min_dim)
 
     #-----------------------------------
 

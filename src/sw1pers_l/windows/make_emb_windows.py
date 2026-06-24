@@ -7,7 +7,7 @@ from sw1pers_l import time_series
 from .point_cloud_tools import mean_center, normalize, meanshift_pointcloud
 
 
-def make_embedded_windows(X, window_size, window_stride):
+def make_embedded_windows(X, window_size, window_stride, min_dim):
 
     X = X.reshape(len(X), )
 
@@ -31,7 +31,7 @@ def make_embedded_windows(X, window_size, window_stride):
     print()
     print("Forming point clouds...\n")
     for i, window in enumerate(tqdm(windows)):
-        input_dim = input_dimensions[i]  #max(dim, 3)      # make this (dim + 1) to not squish some cycles trivial
+        input_dim = max(input_dimensions[i], min_dim)  #max(dim, 3)      # make this (dim + 1) to not squish some cycles trivial
         input_delay = input_delays[i]
         
         emb_window = time_series.embed(window, input_dim, delay)
