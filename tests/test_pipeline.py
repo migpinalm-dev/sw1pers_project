@@ -19,15 +19,23 @@ import pandas as pd
 key = "energy_consumption"
 
 FILE = "tetuan-city-power-consumption"
+cache_file = f"{FILE}.parquet"
 
-path = kagglehub.dataset_download(f"gmkeshav/{FILE}")
+if not os.path.exists(cache_file):
+    path = kagglehub.dataset_download(f"gmkeshav/{FILE}")
 
-print("Path to dataset files:", path)
+    print("Path to dataset files:", path)
 
-files = os.listdir(path)
-print("Downloaded files:", files)
-df = pd.read_csv(os.path.join(path, files[0]))
-df.info()
+    files = os.listdir(path)
+    print("Downloaded files:", files)
+
+    df = pd.read_csv(os.path.join(path, files[0]))
+    df.info()
+
+    df.to_parquet(cache_file)
+else:
+    print("--------READING FROM CACHE--------")
+    df = pd.read_parquet(cache_file)
 
 period = 144
 L = 10
@@ -44,34 +52,45 @@ dates = dates_energy
 # scores = SW1PerS_L(test_ts, size=160, stride=32)
 # print(scores)
 
-# candidate_ws = np.unique(np.logspace(np.log10(len(test_ts)//10), np.log10(len(test_ts)//3), 25).astype(int))
+#------------------------------------------------
 
-candidate_ws = np.linspace(152, 180, 10).astype(int)
-threshold_ratio = 0.2
+candidate_ws = np.unique(np.logspace(np.log10(len(test_ts)//11), np.log10(len(test_ts)//5), 20).astype(int))
+
+# candidate_ws = np.linspace(152, 180, 10).astype(int)
 
 y_metric = []
+
+factor = 1
+
+threshold_ratio = 0.3
+patience = 3
+small_count = 0
+max_drop = 0
+
 best_ws = candidate_ws[-1]   # fallback
 
-prev_metric = None
-prev_drop = None
-
-for ws in candidate_ws:
+for i, ws in enumerate(candidate_ws):
     wstrd = ws // 10
-    scores = SW1PerS_L(test_ts, size=ws, stride=wstrd)
+    scores = SW1PerS_L(test_ts, factor=factor, size=ws*factor, stride=wstrd*factor, plot_bool=False)    # no score plotting
     metric = scores.mean() + 0.5 * scores.var()
     y_metric.append(metric)
-    print(metric, ws)
-    if prev_metric is not None:
-        curr_drop = prev_metric - metric   # how much we improved
-        if prev_drop is not None:
-            # if improvement has become much smaller, we're at the elbow
-            if np.abs(curr_drop) < np.abs(threshold_ratio * prev_drop):
-                best_ws = ws #prev_ws
-                break
-        prev_drop = curr_drop
-        prev_ws = ws    # optional
-    prev_metric = metric
+
+    if i==0:
+        continue    # skip to next iteration
+
+    curr_drop = y_metric[i-1] - y_metric[i]
+    max_drop = max(max_drop, curr_drop)
+
+    if np.abs(curr_drop) < threshold_ratio * max_drop:
+        small_count += 1
+    else:
+        small_count = 0
+
+    if small_count >= patience:
+        best_ws = candidate_ws[i-patience+1]
+        break
+
+print(f"BEST WINDOW SIZE = {best_ws}")
 
 plt.plot(candidate_ws[:len(y_metric)], y_metric)
 plt.show()
-print(f"BEST WINDOW SIZE = {best_ws}")
