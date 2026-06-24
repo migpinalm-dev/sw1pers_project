@@ -6,7 +6,7 @@ from .data_processing import moving_avg, make_spline
 from .diagrams import make_pers_diagrams, make_pers_diagram
 from .sw1pers_scores import compute_scores, density, plot_score_landscape
 
-def SW1PerS(values, rolling_size=1, factor=2):
+def SW1PerS(values, rolling_size=1, factor=1):
     t_ma, ma = moving_avg(values, rolling_size)
 
     _, finer_spline = make_spline(t_ma, ma, factor*len(values))
@@ -21,7 +21,7 @@ def SW1PerS(values, rolling_size=1, factor=2):
 
 #---------------------------------------------------------------------
 
-def SW1PerS_L(values, rolling_size=1, factor=2, choose_hyper_param=False):
+def SW1PerS_L(values, rolling_size=1, factor=1, size=1, stride=1, choose_hyper_param=False, plot_bool = False):
 
     t_ma, ma = moving_avg(values, rolling_size)
 
@@ -29,29 +29,16 @@ def SW1PerS_L(values, rolling_size=1, factor=2, choose_hyper_param=False):
 
     #-----------------------------------
     if choose_hyper_param:
-        in_instances = int(input("Provide size and stride in RATIOS (0) or INSTANCES (any key)"))
-        if in_instances == 0:
-            size_coeff = int(input("Window size = length of time series / __"))
-            stride_coeff = int(input("Window stride = window size / __"))
-            size = len(finer_spline)//size_coeff
-            stride = size//stride_coeff
-            print()
-            print(f"window_size = len(time_series)/{size_coeff}")
-            print(f"window_stride = window_size/{stride_coeff}")
-            print()
-        else:
-            size = int(input("Window size = __"))
-            stride = int(input("Window stride = __"))
-            print()
-            print(f"window_size = {size}")
-            print(f"window_stride = {stride}")
-            print()
-    else:
-        size = len(finer_spline)//8
-        stride = size//4
+        size = int(input("Window size = __"))
+        stride = int(input("Window stride = __"))
         print()
-        print(f"Standard window size is len(time_series)/{size}")
-        print(f"Standard window stride is window_size/{stride}")
+        print(f"window_size = {size}")
+        print(f"window_stride = {stride}")
+        print()
+    else:
+        print()
+        print(f"window_size = {size}")
+        print(f"window_stride = {stride}")
         print()
 
     emb_windows, _, _ = make_embedded_windows(finer_spline, size, stride)
@@ -68,6 +55,7 @@ def SW1PerS_L(values, rolling_size=1, factor=2, choose_hyper_param=False):
                           
     score_density = density(scores, rolling_size_scores)
 
-    plot_score_landscape(scores, score_density, finer_spline, size, stride, None, rolling_size_scores)
+    if plot_bool:
+        plot_score_landscape(scores, score_density, finer_spline, size, stride, None, rolling_size_scores)
 
     return scores
