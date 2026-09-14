@@ -34,7 +34,7 @@ def make_embedded_windows(X, window_size, window_stride, min_dim):
         input_dim = max(input_dimensions[i], min_dim)  #max(dim, 3)      # make this (dim + 1) to not squish some cycles trivial
         input_delay = input_delays[i]
         
-        emb_window = time_series.embed(window, input_dim, delay)
+        emb_window = time_series.embed(window, input_dim, input_delay)
 
         emb_window = mean_center(emb_window)
         emb_window = normalize(emb_window)

@@ -21,7 +21,7 @@ def SW1PerS(values, rolling_size=1, factor=1):
 
 #---------------------------------------------------------------------
 
-def SW1PerS_L(values, rolling_size=1, factor=1, size=1, stride=1, min_dim=3, choose_hyper_param=False, plot_bool = False):
+def SW1PerS_L(values, rolling_size=1, factor=1, size=1, stride=1, min_dim=2, choose_hyper_param=False, plot_bool = False):
 
     t_ma, ma = moving_avg(values, rolling_size)
 

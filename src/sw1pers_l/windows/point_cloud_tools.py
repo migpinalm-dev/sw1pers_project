@@ -4,7 +4,15 @@ def mean_center(X):
     return X - np.mean(X, axis = 0)
 
 def normalize(X):
-    return X/np.linalg.norm(X, axis = 1, keepdims=True)
+    X = np.asarray(X)
+
+    if X.ndim == 1:
+        X = X.reshape(-1, 1)
+
+    norms = np.linalg.norm(X, axis=1, keepdims=True)
+    norms[norms == 0] = 1
+
+    return X / norms
 
 from sklearn.metrics.pairwise import pairwise_distances
 
