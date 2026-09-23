@@ -1,13 +1,13 @@
 # import numpy as np
 from .time_series import embed
 from .windows import make_embedded_windows, make_embedded_ts
-from .data_processing import moving_avg, make_spline
+from .data_processing import sma, gaussian_density, make_spline
 # from .visualize import attractor
 from .diagrams import make_pers_diagrams, make_pers_diagram
-from .sw1pers_scores import compute_scores, density, plot_score_landscape
+from .sw1pers_scores import compute_scores, plot_score_landscape
 
 def SW1PerS(values, rolling_size=1, factor=1):
-    t_ma, ma = moving_avg(values, rolling_size)
+    t_ma, ma = sma(values, rolling_size)
 
     _, finer_spline = make_spline(t_ma, ma, factor*len(values))
 
@@ -21,27 +21,16 @@ def SW1PerS(values, rolling_size=1, factor=1):
 
 #---------------------------------------------------------------------
 
-def SW1PerS_L(values, rolling_size=1, factor=1, size=1, stride=1, min_dim=2, choose_hyper_param=False, plot_bool = False):
+def SW1PerS_L(values, dates=None, rolling_size=1, factor=1, size=1, slide=1, min_dim=2, plot_bool = False):
 
-    t_ma, ma = moving_avg(values, rolling_size)
+    t_ma, ma = sma(values, rolling_size)
+
+    size = size*factor
+    slide = slide*factor
 
     _, finer_spline = make_spline(t_ma, ma, factor*len(values))
 
-    #-----------------------------------
-    if choose_hyper_param:
-        size = int(input("Please choose a window size: "))
-        stride = int(input("Please choose a window stride: "))
-        print()
-        print(f"window_size = {size}")
-        print(f"window_stride = {stride}")
-        print()
-    else:
-        print()
-        print(f"window_size = {size}")
-        print(f"window_stride = {stride}")
-        print()
-
-    emb_windows, _, _ = make_embedded_windows(finer_spline, size, stride, min_dim)
+    emb_windows, _, _ = make_embedded_windows(finer_spline, size, slide, min_dim)
 
     #-----------------------------------
 
@@ -51,11 +40,11 @@ def SW1PerS_L(values, rolling_size=1, factor=1, size=1, stride=1, min_dim=2, cho
 
     #-----------------------------------
 
-    rolling_size_scores = int(size/stride)
+    rolling_size_scores = int(size/slide)    # Resolution
                           
-    score_density = density(scores, rolling_size_scores)
+    score_density = gaussian_density(scores, rolling_size_scores)
 
     if plot_bool:
-        plot_score_landscape(scores, score_density, finer_spline, size, stride, None, rolling_size_scores)
+        plot_score_landscape(scores, score_density, finer_spline, size, slide, dates, rolling_size_scores)
 
     return scores

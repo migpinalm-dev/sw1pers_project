@@ -49,7 +49,7 @@ dates = dates_energy
 
 #------------------------------------------------
 
-# scores = SW1PerS_L(test_ts, size=160, stride=32)
+# scores = SW1PerS_L(test_ts, size=160, slide=32)
 # print(scores)
 
 #------------------------------------------------
@@ -71,7 +71,7 @@ best_ws = candidate_ws[-1]   # fallback
 
 for i, ws in enumerate(candidate_ws):
     wstrd = ws // 10
-    scores = SW1PerS_L(test_ts, factor=factor, size=ws*factor, stride=wstrd*factor, min_dim=2, plot_bool=False)    # no score plotting
+    scores = SW1PerS_L(test_ts, factor=factor, size=ws*factor, slide=wstrd*factor, min_dim=2, plot_bool=False)    # no score plotting
     metric = scores.mean() + 0.5 * scores.var()
     y_metric.append(metric)
 

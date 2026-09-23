@@ -6,7 +6,7 @@ def false_nearest_neighbors(ts, max_dim, delay, R_thresh=10, A_thresh=2, plot=Fa
         ts = ts.squeeze(1)
     # N = len(ts) - max_dim * delay
     fnn_percentages = []
-    eps = 1e-10  # small value to avoid divide-by-zero
+    eps = 1e-9  # small value to avoid divide-by-zero
 
     d = 1
     N = len(ts) - (d) * delay

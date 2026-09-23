@@ -1,3 +1,5 @@
 # parameter calibration
 
-__all__ = ["evaluate_window"]
+from .calibration import calibrate
+
+__all__ = ["calibrate"]

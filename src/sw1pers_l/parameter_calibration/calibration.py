@@ -1,7 +1,7 @@
 import numpy as np
 from sw1pers_l.core import SW1PerS_L
 
-def evaluate_window(series: list[float], lower_bound, upper_bound, num_div) -> int:
+def calibrate(series: list[float], lower_bound, upper_bound, num_div) -> int:
     candidate_ws = np.unique(
         np.logspace(
             np.log10(lower_bound),
@@ -54,3 +54,47 @@ def evaluate_window(series: list[float], lower_bound, upper_bound, num_div) -> i
             break
 
     return int(best_ws)
+
+# -------------------------------------------------------------------
+
+from scipy.stats import kendalltau
+
+def jtk_cycle_score(x, time=None, periods=np.arange(16, 36), n_phases=24):
+    x = np.asarray(x)
+
+    if time is None:
+        time = np.arange(len(x))
+    else:
+        time = np.asarray(time)
+
+    best_score = -np.inf     # compare abs(tau)
+    best_tau = None
+    best_period = None
+    best_phase = None
+
+    for P in periods:
+        phases = np.linspace(0, P, n_phases, endpoint=False)
+
+        for phi in phases:
+            ref = np.cos((2*np.pi/P) * (time - phi))
+
+            tau, _ = kendalltau(x, ref, nan_policy='omit')
+
+            # Skip invalid tau
+            if tau is None or np.isnan(tau):
+                continue
+
+            score = np.abs(tau)
+            if score > best_score:
+                best_score = score
+                best_tau = tau
+                best_period = P
+                best_phase = phi
+
+    return best_tau, best_period, best_phase
+
+def calibrate_via_jtk(ts, period_interval, n_phases=10):
+    y_axis = ts
+    x_axis = np.arange(len(ts))
+    tau, period, phase = jtk_cycle_score(y_axis, x_axis, periods = np.arange(period_interval[0], period_interval[1]), n_phases=2)
+    return tau, period, phase

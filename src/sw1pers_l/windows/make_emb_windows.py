@@ -7,24 +7,25 @@ from sw1pers_l import time_series
 from .point_cloud_tools import mean_center, normalize, meanshift_pointcloud
 
 
-def make_embedded_windows(X, window_size, window_stride, min_dim):
+def make_embedded_windows(X, window_size, window_slide, min_dim):
 
     X = X.reshape(len(X), )
 
-    windows = time_series.make_sliding_windows(X, window_size, window_stride)
+    windows = time_series.make_sliding_windows(X, window_size, window_slide)
 
     emb_windows=[]
     dim, delay = 1, 1
     input_dimensions = []
     input_delays = []
 
+    print()
     print("Finding best parameters...\n")
     for i, window in enumerate(tqdm(windows)):
         ami = parameter_selection.average_mutual_information(window, bins=int(np.sqrt(len(window)))+1)
         delay = parameter_selection.compute_optimal_delay(ami, msg_bool=False)
         input_delays.append(delay)
         
-        fnn = parameter_selection.false_nearest_neighbors(window, max_dim=10, delay=delay)
+        fnn = parameter_selection.false_nearest_neighbors(window, max_dim=6, delay=delay)
         dim = parameter_selection.compute_optimal_dim(fnn, msg_bool=False)
         input_dimensions.append(dim)
 
@@ -43,5 +44,7 @@ def make_embedded_windows(X, window_size, window_stride, min_dim):
         emb_window = normalize(emb_window)    # normalize again because meanshift changes this
 
         emb_windows.append(emb_window)
+    print()
+    print("________________________________________")
 
     return emb_windows, input_dimensions, input_delays
